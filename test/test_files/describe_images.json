@@ -1,0 +1,65 @@
+[
+  {
+    "owner_total": 4,
+    "start": 0,
+    "results": [
+      {
+        "updated_at": "2011-10-18T03:53:37Z",
+        "account_id": "a-shpoolxx",
+        "boot_dev_type": 1,
+        "description": "ubuntu-10.04_with-metadata_kvm_i386.raw volume",
+        "source": "--- \n:snapshot_id: snap-lucid6\n",
+        "state": "init",
+        "arch": "x86",
+        "is_public": false,
+        "created_at": "2011-10-18T03:53:37Z",
+        "uuid": "wmi-lucid6",
+        "id": "wmi-lucid6",
+        "md5sum": "8e0d8d37d704751a076fdf704a311350"
+      },
+      {
+        "updated_at": "2011-10-18T03:53:36Z",
+        "account_id": "a-shpoolxx",
+        "boot_dev_type": 2,
+        "description": "ubuntu-10.04_with-metadata_kvm_i386.raw local",
+        "source": "--- \n:uri: file:///home/wakame/work/wakame-vdc/tmp/images/ubuntu-10.04_with-metadata_kvm_i386.raw\n",
+        "state": "init",
+        "arch": "x86",
+        "is_public": false,
+        "created_at": "2011-10-18T03:53:36Z",
+        "uuid": "wmi-lucid5",
+        "id": "wmi-lucid5",
+        "md5sum": "8e0d8d37d704751a076fdf704a311350"
+      },
+      {
+        "updated_at": "2011-10-18T03:53:35Z",
+        "account_id": "a-shpoolxx",
+        "boot_dev_type": 1,
+        "description": "ubuntu-10.04_without-metadata_kvm_i386.raw volume",
+        "source": "--- \n:snapshot_id: snap-lucid1\n",
+        "state": "init",
+        "arch": "x86",
+        "is_public": false,
+        "created_at": "2011-10-18T03:53:35Z",
+        "uuid": "wmi-lucid1",
+        "id": "wmi-lucid1",
+        "md5sum": "8b2a8fb606f5b6ceeca11d9f71e034a8"
+      },
+      {
+        "updated_at": "2011-10-18T03:53:35Z",
+        "account_id": "a-shpoolxx",
+        "boot_dev_type": 2,
+        "description": "ubuntu-10.04_without-metadata_kvm_i386.raw local",
+        "source": "--- \n:uri: file:///home/wakame/work/wakame-vdc/tmp/images/ubuntu-10.04_without-metadata_kvm_i386.raw\n",
+        "state": "init",
+        "arch": "x86",
+        "is_public": false,
+        "created_at": "2011-10-18T03:53:35Z",
+        "uuid": "wmi-lucid0",
+        "id": "wmi-lucid0",
+        "md5sum": "8b2a8fb606f5b6ceeca11d9f71e034a8"
+      }
+    ],
+    "limit": null
+  }
+]
