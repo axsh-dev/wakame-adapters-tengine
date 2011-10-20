@@ -11,7 +11,7 @@ module Tama
         self.api = api
       end
       
-      def pass_method(method_name)
+      def method_missing(method_name,*args)
         self.api.send(method_name)
       end
     end
@@ -21,11 +21,11 @@ module Tama
         super([A::Ec2Api.new, A::WakameApi.new])
       end
       
-      def pass_method(method_name)
+      def method_missing(method_name,*args)
         if self.api.is_a? Array
           index = 0
           begin
-            self.api[index].send(method_name)
+            self.api[index].send(method_name,*args)
           rescue NoMethodError => e
             index += 1
             raise if index == self.api.length
@@ -44,9 +44,9 @@ module Tama
     end
     
     class ControllerFactory
-      def self.create_controller(type = nil)
-        case type
-          when :test || "test" then
+      def self.create_controller(*args)
+        case 
+          when args.first == :test || args.first == "test" then
             c = TamaTestController.new
             c
           else TamaController.new
