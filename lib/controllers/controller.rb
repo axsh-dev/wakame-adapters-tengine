@@ -6,25 +6,18 @@ require 'right_aws'
 module Tama
   module Controllers
     A = Tama::Apis
-  
+
+    # A Controller just passes any method calls it gets to its api
+    # The api can be whatever class you want it to be.
+    #
+    # A Controller can contain one api or an array of apis. In case of an array
+    # TamaController checks each of its apis in turn and executes the method
+    # on the first API that supports it
     class Controller
       attr_accessor :api
       
       def initialize(api)
         self.api = api
-      end
-      
-      def method_missing(method_name,*args)
-        self.api.send(method_name)
-      end
-    end
-    
-    class TamaController < Controller
-      def initialize(access_key,ec2_host,ec2_port,ec2_protocol,wakame_host,wakame_port,wakame_protocol)
-        super([
-          RightAws::Ec2.new(access_key,nil,{:server => ec2_host,:port => ec2_port,:protocol => ec2_protocol}),
-          A::WakameApi.new(access_key,wakame_host,wakame_port,wakame_protocol)
-        ])
       end
       
       def method_missing(method_name,*args)
@@ -43,6 +36,21 @@ module Tama
       end
     end
     
+    # The TamaController is a controller that has two apis
+    # A RightAws::Ec2 object for handling Amazon Ec2 requests and
+    # a WakameApi for handling requests to Wakame-vdc
+    class TamaController < Controller
+      def initialize(access_key,ec2_host,ec2_port,ec2_protocol,wakame_host,wakame_port,wakame_protocol)
+        super([
+          RightAws::Ec2.new(access_key,nil,{:server => ec2_host,:port => ec2_port,:protocol => ec2_protocol}),
+          A::WakameApi.new(access_key,wakame_host,wakame_port,wakame_protocol)
+        ])
+      end
+    end
+    
+    # TamaTestController does the same as TamaController but
+    # reads output from a file on disk. It doesn't actually make
+    # any requests to Wakame or Ec2
     class TamaTestController < TamaController
       def initialize
         self.api = [A::Ec2ApiTest.new,A::WakameApiTest.new]
