@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+require 'rubygems'
+require 'right_aws'
+
 module Tama
   module Controllers
     A = Tama::Apis
@@ -17,8 +20,11 @@ module Tama
     end
     
     class TamaController < Controller
-      def initialize
-        super([A::Ec2Api.new, A::WakameApi.new])
+      def initialize(access_key,ec2_host,ec2_port,ec2_protocol,wakame_host,wakame_port,wakame_protocol)
+        super([
+          RightAws::Ec2.new(access_key,nil,{:server => ec2_host,:port => ec2_port,:protocol => ec2_protocol}),
+          A::WakameApi.new(access_key,wakame_host,wakame_port,wakame_protocol)
+        ])
       end
       
       def method_missing(method_name,*args)
@@ -47,9 +53,8 @@ module Tama
       def self.create_controller(*args)
         case 
           when args.first == :test || args.first == "test" then
-            c = TamaTestController.new
-            c
-          else TamaController.new
+            TamaTestController.new
+          else TamaController.new(*args)
         end
       end
     end

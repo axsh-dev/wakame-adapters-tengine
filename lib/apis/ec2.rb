@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 require 'rubygems'
-#require 'right_aws'
 require 'json'
 
 module Tama
