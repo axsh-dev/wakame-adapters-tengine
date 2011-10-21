@@ -22,7 +22,9 @@ module Tama
       
       def describe_instances(list=[])
         File.open(self.describe_instances_file) { |file|
-          JSON.parse(file.readlines.to_s).map { |inst_map|
+          res = JSON.parse(file.readlines.to_s).first["results"]
+          res.delete_if {|item| not list.member?(item["id"])} unless list.empty?
+          res.map { |inst_map|
             dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
             private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
             ip_address = inst_map["vif"].first["ipv4"]["nat_address"] unless inst_map["vif"].nil? || inst_map["vif"].empty? || inst_map["vif"].first["ipv4"].nil?
@@ -67,7 +69,9 @@ module Tama
       def describe_images(list=[], image_type=nil)
         File.open(self.describe_images_file) { |file|
           #p JSON.parse(file.readlines.to_s)
-          JSON.parse(file.readlines.to_s).first["results"].map { |img_map|
+          res = JSON.parse(file.readlines.to_s).first["results"]
+          res.delete_if {|item| not list.member?(item["id"])} unless list.empty?
+          res.map { |img_map|
             {:root_device_name=>"",
              :aws_ramdisk_id=>"",
              :block_device_mappings=>[{:ebs_snapshot_id=>"",
