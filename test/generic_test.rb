@@ -1,5 +1,7 @@
-require '../tama'
-include Tama
+load_path = "#{File.expand_path(File.dirname(__FILE__))}/.."
+$LOAD_PATH.unshift(load_path) unless $LOAD_PATH.include?(load_path)
+
+require 'tama'
 
 c = Tama::Tama.new(:test)
 

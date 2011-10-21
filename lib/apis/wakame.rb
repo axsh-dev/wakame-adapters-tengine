@@ -6,25 +6,25 @@ module Tama
       attr_accessor :host
       attr_accessor :port
       attr_accessor :protocol
-      #attr_accessor :web_api
+      attr_accessor :account
       
-      Protocols = [:http,:https]
+      Protocols = ["http","https"]
       
-      def initialize(host = nil, port = nil, protocol = :http)
-        raise ArgumentError, "Unknown protocol: #{protocol}. Can be either of the following: #{Protocols.join(",")}" unless Protocols.member(protocol)
+      def initialize(account = nil,host = nil, port = nil, protocol = "http")
+        raise ArgumentError, "Unknown protocol: #{protocol}. Can be either of the following: #{Protocols.join(",")}" unless Protocols.member?(protocol)
         
         self.host = host
         self.port = port
         self.protocol = protocol
-        #self.web_api = URI.parse()
+        self.account = account
       end
       
-      def show_host_nodes(account = "a-shpoolxx")
-        res = make_request("#{self.web_api}/api/host_nodes",account)
+      def show_host_nodes(account = self.account)
+        res = make_request("#{self.web_api}/api/host_pools",Net::HTTP::Get,account)
+        JSON.parse res.body
       end
       alias :describe_host_nodes :show_host_nodes
       
-      private
       def make_request(uri,type,accesskey,form_data = nil)
         api = URI.parse(uri)
         
