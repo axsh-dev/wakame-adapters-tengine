@@ -42,8 +42,7 @@ module Tama
             :spot_instance_request_id=>"",
             :ssh_key_name=>"",
             :virtualization_type=>"",
-            #TODO: Should this really be the netfilter group id over here?! Check that out
-            :placement_group_name=>inst_map["netfilter_group_id"],
+            :placement_group_name=>"",
             :requester_id=>"",
             :aws_instance_id=>inst_map["id"],
             :aws_product_codes=>[],
