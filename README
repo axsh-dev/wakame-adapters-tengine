@@ -1,0 +1,74 @@
+Tama
+====
+TamaはアマゾンEC２とWakame-vdcを呼び出すソフトウェアです。Tamaでは、一つのAPIからどちも呼び出すことが出来るようになります。
+
+必要なRuby Gem
+=============
+rubygems
+json
+right_aws
+
+セットアップ
+==========
+必要なgemをインストールすために、バンドルを使って下さい。
+
+gem install bundler
+
+そのあとで、Tamaのダイレクトリーでこのコマンドをして下さい。
+
+bundle install
+
+これでTamaを使えるようになります。
+
+Tamaの使い方
+==========
+Tamaを使うのだったら、Tamaのオブジェクトが作らなければなりません。
+
+t = Tama::Tama.new(Account,Ec2_host,Ec2_port,Ec2_protocol,Wakame_host,Wakame_port,Wakame_protocol)
+
+パラメータの説明：
+  ＊Account: Wakame-vdcで使うaccount-idです。例えば：'a-shpoolxx'
+  ＊Ec2_host:Ec2のWebAPIのIPアドレス。例えば："192.168.2.22"
+  ＊Ec2_port:Ec2のWebAPIのポート。例えば：9005
+  ＊Ec2_protocol:Ec2が使うプロトコル。例えば："http"や"https"
+  ＊Wakame_host:Wakame-vdcのWebAPIのIPアドレス。例えば："192.168.2.22"
+  ＊Wakame_port:Wakame-vdcのWebAPIのポート。例えば：9001
+  ＊Wakame_protocol:Wakame-vdcが使うプロトコル。例えば："http"や"https"
+
+そのあとでこのメソッドが呼び出せます。
+
+t.run_instances(Image_id,Min,Max,Security_Groups,SSH_Key, User_Data, Addressing_Type, Instance_Type)
+t.describe_instances([])
+t.terminate_instances([])
+t.describe_images([])
+t.describe_host_nodes
+
+run_instancesのパラメーターの説明
+  ＊Image_id:マシンイメージのIDです。このイメージのインスタンスを立ち上がります。例えば：'wmi-lucid5'
+  ＊Min:立ち上がるインスタンスのミニマムです。例えば３だったら、インスタンスを３台立ち上がります。
+  ＊Max:立ち上がるインスタンスのマクシマムです。例えば５だったら、出来れば５台を立ち上がります。
+  ＊Security_Groups:セキュリティーグループの名前が入っているArrayです。例えば：['group1','group2']
+  ＊SSH_Key：立ち上がるインスタンスで使いたいSSHキーペアの名前です。例えば："demokey"
+  ＊User_Data：ユーザーが何でも入れても良いのデータです。例えば："ワカメが大好きです"
+  ＊Addressing_Type：Wakame-vdcのアダプターで使うと、これは何もしませんが、Tamaはright_awsを使っているので、必要です。何でも入れても良いです。
+  ＊Instance_Type：どんなInstance-specでインスタンスを立ち上がるのはここで決めます。例えば："is-demospec"
+  
+describe_instancesとterminate_instancesとdescribe_imagesのパラメーターはみんなインスタンスやイメージIDが入っているArrayです。describeだったら、そのIDのデータを返すとterminateだったら、そのIDのインスタンスをターミネートします。例えば：['i-9slepd2d','i-yfhvndlp','i-74mcdk49']
+
+Tamaのテストの使い方
+=================
+TamaはWakameやEc2を呼び出せるだけではなく、見せ物のデータでテストをすることも出来ます。そうする場合は、こうやってTamaのオブジェクトを作って下さい。
+
+t = Tama::Tama.new(:test)
+
+メソッドはふつうのように呼び出せますが、Wakame-vdcやEc2を呼び出さない。その代わりにデータをファイルから読みます。そのファイルはJSONで書いてあるとディフォルトではTama_directory/test/test_filesにあるます。
+
+＊本当にインスタンスを立ち上がりませんので、t.run_instancesはパラメーターが必要がありません。
+
+欲しければ、JSONのファイルのパースも決められます。
+
+t.api[0].describe_instances_file = "/path/to/file"
+t.api[0].describe_images_file = "/path/to/file"
+t.api[0].run_instances_file = "/path/to/file"
+t.api[0].terminate_instances_file = "/path/to/file"
+t.api[1].host_nodes_file = "/path/to/file"
