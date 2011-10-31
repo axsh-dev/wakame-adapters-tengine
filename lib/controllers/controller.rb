@@ -27,7 +27,7 @@ module Tama
             self.api[index].send(method_name,*args)
           rescue NoMethodError => e
             index += 1
-            raise if index == self.api.length
+            raise if index == self.api.length || (not method_name == e.name)
             retry
           end
         else
