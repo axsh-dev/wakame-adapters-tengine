@@ -2,6 +2,64 @@ require 'net/http'
 
 module Tama
   module Apis
+    module InstanceHashBuilder
+      # Takes the response from wakame-vdc's /api/instances
+      # and builds a hash similar to right_aws' describe_instances
+      # but changes the layout of IP addresses
+      def build_instances_hash(w_response)
+        w_response.first["results"].map { |inst_map|
+          dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
+          private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
+          # Build the hash of ipaddresses
+          ip_address = {
+            inst_map["network"].first["network_name"] => inst_map["network"].first["ipaddr"].first,
+            inst_map["network"].first["nat_network_name"] => inst_map["network"].first["nat_ipaddr"].first
+          }
+          # Remove non existing addresses
+          ip_address.delete_if {|k,v| k.nil? || v.nil?}
+
+          private_ip_address = ip_address[self.private_network_name]
+
+          # Build the final hash to return
+          # This hash is based on right_aws' describe_instances but
+          # changes the ip_address format
+          {:aws_kernel_id=>"",
+          :aws_launch_time=>inst_map["created_at"],
+          :tags=>{},
+          :aws_reservation_id=>"",
+          :aws_owner=>inst_map["account_id"],
+          :instance_lifecycle=>"",
+          :block_device_mappings=>[{:ebs_volume_id=>"", :ebs_status=>"", :ebs_attach_time=>"", :ebs_delete_on_termination=>false, :device_name=>""}],
+          :ami_launch_index=>"",
+          :root_device_name=>"",
+          :aws_ramdisk_id=>"",
+          :aws_availability_zone=>inst_map["host_node"],
+          :aws_groups=>inst_map["netfilter_group_id"],
+          :spot_instance_request_id=>"",
+          :ssh_key_name=>"",
+          :virtualization_type=>"",
+          :placement_group_name=>"",
+          :requester_id=>"",
+          :aws_instance_id=>inst_map["id"],
+          :aws_product_codes=>[],
+          :client_token=>"",
+          :private_ip_address=>private_ip_address,
+          :architecture=>inst_map["arch"],
+          :aws_state_code=>0,
+          :aws_image_id=>inst_map["image_id"],
+          :root_device_type=>"",
+          :ip_address=>ip_address,
+          :dns_name=>dns_name,
+          :monitoring_state=>"",
+          :aws_instance_type=>inst_map["instance_spec_id"],
+          :aws_state=>inst_map["state"],
+          :private_dns_name=>private_dns_name,
+          :aws_reason=>""
+          }
+        }
+      end
+    end
+    
     class WakameApi
       attr_accessor :host
       attr_accessor :port
@@ -56,10 +114,17 @@ module Tama
     class WakameApiTest
       attr_accessor :host_nodes_file
       attr_accessor :show_instance_specs_file
+      attr_accessor :show_instances_file
+      attr_accessor :private_network_name
+      
+      include InstanceHashBuilder
       
       def initialize
         self.host_nodes_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/host_nodes.json"
         self.show_instance_specs_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/show_instance_specs.json"
+        self.show_instances_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/describe_instances.json"
+        
+        self.private_network_name = "nw-data"
       end
       
       def show_host_nodes(list = [])
@@ -71,6 +136,15 @@ module Tama
         read_file(self.show_instance_specs_file, list)
       end
       alias :describe_instance_specs :show_instance_specs
+      
+      # This method could be taken care of by the EC2 adapter but since we
+      # want to show ip addresses differently from EC2, we add it to the
+      # Wakame part of Tama
+      def show_instances(list = [])
+        instances = read_file(self.show_instances_file, list)
+        build_instances_hash(instances)
+      end
+      alias :describe_instances :show_instances
       
       private
       def read_file(file,list = [])

@@ -7,7 +7,7 @@
         "vif": [
           {
             "ipv4": {
-              "nat_address": null,
+              "nat_address": "172.16.0.234",
               "address": "192.168.2.188"
             },
             "vif_id": "vif-aspojqs4"
@@ -19,15 +19,15 @@
         "network": [
           {
             "nat_ipaddr": [
-
+              "172.16.0.234"
             ],
             "nat_dns_name": null,
             "dns_name": "jria301q.shpoolxx.vdc.local",
             "ipaddr": [
               "192.168.2.188"
             ],
-            "nat_network_name": null,
-            "network_name": "nw-demonet"
+            "nat_network_name": "nw-outside",
+            "network_name": "nw-data"
           }
         ],
         "state": "running",
@@ -74,7 +74,7 @@
               "192.168.2.94"
             ],
             "nat_network_name": null,
-            "network_name": "nw-demonet"
+            "network_name": "nw-data"
           }
         ],
         "state": "running",
