@@ -48,19 +48,31 @@ module Tama
     
     class WakameApiTest
       attr_accessor :host_nodes_file
+      attr_accessor :show_instance_specs_file
       
       def initialize
         self.host_nodes_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/host_nodes.json"
+        self.show_instance_specs_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/show_instance_specs.json"
       end
       
       def show_host_nodes(list = [])
-        File.open(self.host_nodes_file) { |file|
+        read_file(self.host_nodes_file, list)
+      end
+      alias :describe_host_nodes :show_host_nodes
+      
+      def show_instance_specs(list = [])
+        read_file(self.show_instance_specs_file, list)
+      end
+      alias :describe_instance_specs :show_instance_specs
+      
+      private
+      def read_file(file,list = [])
+        File.open(file) { |file|
           res = JSON.parse(file.readlines.to_s)
           res.first["results"].delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res
         }
       end
-      alias :describe_host_nodes :show_host_nodes
     end
   end
 end
