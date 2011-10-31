@@ -42,8 +42,8 @@ module Tama
     class TamaController < Controller
       def initialize(access_key,ec2_host,ec2_port,ec2_protocol,wakame_host,wakame_port,wakame_protocol)
         super([
-          RightAws::Ec2.new(access_key,"dummy",{:server => ec2_host,:port => ec2_port,:protocol => ec2_protocol}),
-          A::WakameApi.new(access_key,wakame_host,wakame_port,wakame_protocol)
+          A::WakameApi.new(access_key,wakame_host,wakame_port,wakame_protocol),
+          RightAws::Ec2.new(access_key,"dummy",{:server => ec2_host,:port => ec2_port,:protocol => ec2_protocol})
         ])
       end
     end
@@ -53,7 +53,7 @@ module Tama
     # any requests to Wakame or Ec2
     class TamaTestController < TamaController
       def initialize
-        self.api = [A::Ec2ApiTest.new,A::WakameApiTest.new]
+        self.api = [A::WakameApiTest.new,A::Ec2ApiTest.new]
       end
     end
     
