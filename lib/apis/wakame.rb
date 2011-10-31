@@ -65,16 +65,21 @@ module Tama
       attr_accessor :port
       attr_accessor :protocol
       attr_accessor :account
+      attr_accessor :private_network_name
       
       Protocols = ["http","https"]
       
-      def initialize(account = nil,host = nil, port = nil, protocol = "http")
+      include InstanceHashBuilder
+      
+      def initialize(account = nil,host = nil, port = nil, protocol = "http",private_network_name = "nw-data")
         raise ArgumentError, "Unknown protocol: #{protocol}. Can be either of the following: #{Protocols.join(",")}" unless Protocols.member?(protocol)
         
         self.host = host
         self.port = port
         self.protocol = protocol
         self.account = account
+        
+        self.private_network_name = private_network_name
       end
       
       def show_host_nodes(list = [], account = self.account)
@@ -86,6 +91,15 @@ module Tama
         make_request("#{self.web_api}/api/instance_specs",Net::HTTP::Get,account, list)
       end
       alias :describe_instance_specs :show_instance_specs
+      
+      # This method could be taken care of by the EC2 adapter but since we
+      # want to show ip addresses differently from EC2, we add it to the
+      # Wakame part of Tama
+      def show_instances(list = [])
+        instances = make_request("#{self.web_api}/api/instances",Net::HTTP::Get,account, list)
+        build_instances_hash(instances)
+      end
+      alias :describe_instances :show_instances
       
       def make_request(uri,type,accesskey,list = [])
         api = URI.parse(uri)
