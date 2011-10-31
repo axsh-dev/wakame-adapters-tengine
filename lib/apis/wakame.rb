@@ -19,26 +19,33 @@ module Tama
         self.account = account
       end
       
-      def show_host_nodes(account = self.account)
-        res = make_request("#{self.web_api}/api/host_pools",Net::HTTP::Get,account)
-        JSON.parse res.body
+      def show_host_nodes(list = [], account = self.account)
+        make_request("#{self.web_api}/api/host_pools",Net::HTTP::Get,account, list)
       end
       alias :describe_host_nodes :show_host_nodes
       
-      def make_request(uri,type,accesskey,form_data = nil)
+      def show_instance_specs(list = [], account = self.account)
+        make_request("#{self.web_api}/api/instance_specs",Net::HTTP::Get,account, list)
+      end
+      alias :describe_instance_specs :show_instance_specs
+      
+      def make_request(uri,type,accesskey,list = [])
         api = URI.parse(uri)
         
         req = type.new(api.path)
         req.add_field("X_VDC_ACCOUNT_UUID", accesskey)
         
         req.body = ""
-        req.set_form_data(form_data) unless form_data.nil?
+        #req.set_form_data(form_data) unless form_data.nil?
 
         res = Net::HTTP.new(api.host, api.port).start do |http|
           http.request(req)
         end
         
-        res
+        body = JSON.parse(res.body)
+        body.first["results"].delete_if {|item| not list.member?(item["id"])} unless list.empty?
+        
+        body
       end
       
       def web_api

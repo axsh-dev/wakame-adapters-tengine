@@ -28,7 +28,7 @@ Instance_Type = 'is-demospec'
 
 c = Tama::Tama.new(Account,Ec2_host,Ec2_port,Ec2_protocol,Wakame_host,Wakame_port,Wakame_protocol)
 
-[:run_instances,:terminate_instances,:describe_instances,:describe_images,:describe_host_nodes].each { |method|
+[:run_instances,:terminate_instances,:describe_instances,:describe_images,:describe_host_nodes,:describe_instance_specs].each { |method|
   puts "Testing method: #{method}\n"
   puts "Testing method: #{method}\n".gsub(/./) {|s| "-"}
   p case method
