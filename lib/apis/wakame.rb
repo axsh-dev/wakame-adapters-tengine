@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https'
 
 module Tama
   module Apis
@@ -113,7 +114,10 @@ module Tama
         req.body = ""
         #req.set_form_data(form_data) unless form_data.nil?
 
-        res = Net::HTTP.new(api.host, api.port).start do |http|
+        session = Net::HTTP.new(api.host, api.port)
+        session.use_ssl = (self.protocol == "https")
+
+        res = session.start do |http|
           http.request(req)
         end
         

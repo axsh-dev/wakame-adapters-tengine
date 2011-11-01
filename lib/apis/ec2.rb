@@ -68,7 +68,6 @@ module Tama
       
       def describe_images(list=[], image_type=nil)
         File.open(self.describe_images_file) { |file|
-          #p JSON.parse(file.readlines.to_s)
           res = JSON.parse(file.readlines.to_s).first["results"]
           res.delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res.map { |img_map|
