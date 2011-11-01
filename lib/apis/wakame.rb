@@ -11,14 +11,17 @@ module Tama
           dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
           private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
           # Build the hash of ipaddresses
-          ip_address = {
-            inst_map["network"].first["network_name"] => inst_map["network"].first["ipaddr"].first,
-            inst_map["network"].first["nat_network_name"] => inst_map["network"].first["nat_ipaddr"].first
-          }
-          # Remove non existing addresses
-          ip_address.delete_if {|k,v| k.nil? || v.nil?}
-
-          private_ip_address = ip_address[self.private_network_name]
+          unless inst_map["network"].nil? || inst_map["network"].empty?
+            ip_address = {
+              inst_map["network"].first["network_name"] => inst_map["network"].first["ipaddr"].first,
+              inst_map["network"].first["nat_network_name"] => inst_map["network"].first["nat_ipaddr"].first
+            }
+            # Remove non existing addresses
+            ip_address.delete_if {|k,v| k.nil? || v.nil?}
+            
+            # Determine private ip address
+            private_ip_address = ip_address[self.private_network_name]
+          end
 
           # Build the final hash to return
           # This hash is based on right_aws' describe_instances but
