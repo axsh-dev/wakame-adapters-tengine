@@ -13,15 +13,27 @@ module Tama
           private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
           # Build the hash of ipaddresses
           unless inst_map["network"].nil? || inst_map["network"].empty?
-            ip_address = {
-              inst_map["network"].first["network_name"] => inst_map["network"].first["ipaddr"].first,
-              inst_map["network"].first["nat_network_name"] => inst_map["network"].first["nat_ipaddr"].first
+            ip_address = {}
+            inst_map["network"].each { |network|
+              ip_address.merge!({network["network_name"] => network["ipaddr"]})
+              ip_address.merge!({network["nat_network_name"] => network["nat_ipaddr"]})
             }
             # Remove non existing addresses
             ip_address.delete_if {|k,v| k.nil? || v.nil?}
             
             # Determine private ip address
             private_ip_address = ip_address[self.private_network_name]
+            
+            # Build the hash of dns names
+            dns_name = {}
+            inst_map["network"].each { |network|
+              dns_name.merge!({network["network_name"] => network["dns_name"]})
+              dns_name.merge!({network["nat_network_name"] => network["nat_dns_name"]})
+            }
+            dns_name.delete_if {|k,v| k.nil?}
+            
+            # Determine the private dns name
+            private_dns_name = dns_name[self.private_network_name]
           end
 
           # Build the final hash to return
@@ -38,7 +50,7 @@ module Tama
           :root_device_name=>"",
           :aws_ramdisk_id=>"",
           :aws_availability_zone=>inst_map["host_node"],
-          :aws_groups=>inst_map["netfilter_group_id"],
+          :aws_groups=>inst_map["netfilter_group"],
           :spot_instance_request_id=>"",
           :ssh_key_name=>"",
           :virtualization_type=>"",
