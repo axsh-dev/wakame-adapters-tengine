@@ -48,12 +48,12 @@ Test:
   Using the word test as the first paremeter causes all output to be read from a file.
 
 Commands:
-  run_instances                     # Start a new instance using the data defined in this file.
-  describe_instances [instance_ids] # Show the alive instances.
-  terminate_instances instance_ids  # Terminate alive instances.
-  describe_images                   # Describes images in the database.
-  describe_host_nodes               # Describes host nodes in the database
-  describe_instance_specs           # Describes instance specs in the database
+  run_instances                      # Start a new instance using the data defined in this file.
+  describe_instances [instance_ids]  # Show the alive instances.
+  terminate_instances instance_ids   # Terminate alive instances.
+  describe_images                    # Describes images in the database.
+  describe_host_nodes [host_ids]     # Describes host nodes in the database
+  describe_instance_specs [spec_ids] # Describes instance specs in the database
 
 Examples:
   #{bin_name} test describe_instances
