@@ -35,6 +35,7 @@ if ARGV[0] == "help" || ARGV[0] == "--help" || ARGV[0] == "-h"
 end
 
 begin
+  require 'yaml'
   config = YAML.load_file File.expand_path('../calltama.yml', __FILE__)
 rescue
   puts "Warning: Config file (calltama.yml) not found."
