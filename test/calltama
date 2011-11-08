@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+load_path = "#{File.expand_path(File.dirname(__FILE__))}/.."
+$LOAD_PATH.unshift(load_path) unless $LOAD_PATH.include?(load_path)
+
+require 'tama'
+
+#config = YAML.load_file(File.expand_path('./calltama.yml', __FILE__))
+begin
+  config = YAML.load_file('calltama.yml')
+rescue
+  puts "Warning: Config file (calltama.yml) not found."
+  config = {}
+end
+
+#Arguments for Tama
+Account = config["Account"]
+
+Ec2_host = config["Ec2_host"]
+Ec2_port = config["Ec2_port"]
+Ec2_protocol = config["Ec2_protocol"]
+
+Wakame_host = config["Wakame_host"]
+Wakame_port = config["Wakame_port"]
+Wakame_protocol = config["Wakame_protocol"]
+
+#Put the instances you want to terminate in this array
+Instances_to_terminate = config["Instances_to_terminate"]
+
+#Arguments for run_instances
+Image_id = config["Image_id"]
+Min = config["Min"]
+Max = config["Max"]
+Security_Groups = config["Security_Groups"]
+SSH_Key = config["SSH_Key"]
+User_Data = config["User_Data"]
+Addressing_Type = config["Addressing_Type"]
+Instance_Type = config["Instance_Type"]
+HOST = config["HOST"]
+
+def usage
+bin_name = "calltama"
+"Usage:
+  ruby #{bin_name} [test] [command] [options]
+
+Test:
+  Using the word test as the first paremeter causes all output to be read from a file.
+
+Commands:
+  run_instances                     # Start a new instance using the data defined in this file.
+  describe_instances [instance_ids] # Show the alive instances.
+  terminate_instances instance_ids  # Terminate alive instances.
+  describe_images                   # Describes images in the database.
+  describe_host_nodes               # Describes host nodes in the database
+  describe_instance_specs           # Describes instance specs in the database
+
+Examples:
+  #{bin_name} test describe_instances
+  #{bin_name} run_instances
+  #{bin_name} terminate instances i-dlobuy33 i-8390cvle
+  #{bin_name} test describe_images wmi-lucid0 wmi-lucid5"
+end
+
+if ARGV[0] == "help" || ARGV[0] == "--help" || ARGV[0] == "-h"
+  puts usage
+  exit 0
+end
+
+if ARGV[0] == "test"
+  c = Tama::Tama.new(:test)
+  args = ARGV.slice(1..ARGV.length) || []
+else
+  c = Tama::Tama.new(Account,Ec2_host,Ec2_port,Ec2_protocol,Wakame_host,Wakame_port,Wakame_protocol)
+  args = ARGV
+end
+
+if args.empty?
+  [:run_instances,:terminate_instances,:describe_instances,:describe_images,:describe_host_nodes,:describe_instance_specs].each { |method|
+    puts "Testing method: #{method}\n"
+    puts "Testing method: #{method}\n".gsub(/./) {|s| "-"}
+    p case method
+      when :run_instances then c.send(method,Image_id,Min,Max,Security_Groups,SSH_Key, User_Data, Addressing_Type, Instance_Type, nil, nil, HOST)
+      when :terminate_instances then c.send(method,Instances_to_terminate)
+      else c.send(method)
+    end
+    puts "\n"
+  }
+elsif args[0] == "run_instances"
+  p c.run_instances(Image_id,Min,Max,Security_Groups,SSH_Key, User_Data, Addressing_Type, Instance_Type, nil, nil, HOST)
+else
+  p c.send(args[0],args.slice(1..ARGV.length) || [])
+end

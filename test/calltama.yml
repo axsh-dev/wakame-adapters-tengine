@@ -1,0 +1,24 @@
+# Arguments for Tama
+Account: "a-shpoolxx"
+
+Ec2_host: "192.168.2.22"
+Ec2_port: "9005"
+Ec2_protocol: "http"
+
+Wakame_host: "127.0.0.1"
+Wakame_port: "9001"
+Wakame_protocol: "http"
+
+#Put the instances you want to terminate in this array
+Instances_to_terminate: []
+
+#Arguments for run_instances
+Image_id: 'wmi-lucid5'
+Min: 3
+Max: 3
+Security_Groups: ['default']
+SSH_Key: 'demopair'
+User_Data: 'joske'
+Addressing_Type: 'public'
+Instance_Type: 'is-demospec'
+HOST: 'hp-demo1'
