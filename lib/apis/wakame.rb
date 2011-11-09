@@ -7,7 +7,7 @@ module Tama
       # Takes the response from wakame-vdc's /api/instances
       # and builds a hash similar to right_aws' describe_instances
       # but changes the layout of IP addresses
-      def build_instances_hash(w_response)
+      def build_instances_hash(w_response,account_id)
         w_response.first["results"].map { |inst_map|
           dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
           private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
@@ -43,7 +43,7 @@ module Tama
           :aws_launch_time=>inst_map["created_at"],
           :tags=>{},
           :aws_reservation_id=>"",
-          :aws_owner=>inst_map["account_id"],
+          :aws_owner=>account_id,
           :instance_lifecycle=>"",
           :block_device_mappings=>[{:ebs_volume_id=>"", :ebs_status=>"", :ebs_attach_time=>"", :ebs_delete_on_termination=>false, :device_name=>""}],
           :ami_launch_index=>"",
@@ -52,7 +52,7 @@ module Tama
           :aws_availability_zone=>inst_map["host_node"],
           :aws_groups=>inst_map["netfilter_group_id"],
           :spot_instance_request_id=>"",
-          :ssh_key_name=>"",
+          :ssh_key_name=>inst_map["ssh_key_pair"],
           :virtualization_type=>"",
           :placement_group_name=>"",
           :requester_id=>"",
@@ -113,7 +113,7 @@ module Tama
       # Wakame part of Tama
       def show_instances(list = [])
         instances = make_request("#{self.web_api}/api/instances",Net::HTTP::Get,account, list)
-        build_instances_hash(instances)
+        build_instances_hash(instances,account)
       end
       alias :describe_instances :show_instances
       
@@ -149,6 +149,7 @@ module Tama
       attr_accessor :show_instance_specs_file
       attr_accessor :show_instances_file
       attr_accessor :private_network_name
+      attr_accessor :account
       
       include InstanceHashBuilder
       
@@ -157,6 +158,7 @@ module Tama
         self.show_instance_specs_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/show_instance_specs.json"
         self.show_instances_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/describe_instances.json"
         
+        self.account = "a-shpoolxx"
         self.private_network_name = "nw-data"
       end
       
@@ -175,7 +177,7 @@ module Tama
       # Wakame part of Tama
       def show_instances(list = [])
         instances = read_file(self.show_instances_file, list)
-        build_instances_hash(instances)
+        build_instances_hash(instances,self.account)
       end
       alias :describe_instances :show_instances
       

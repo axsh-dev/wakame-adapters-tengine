@@ -12,12 +12,14 @@ module Tama
       attr_accessor :describe_images_file
       attr_accessor :run_instances_file
       attr_accessor :terminate_instances_file
+      attr_accessor :account
       
       def initialize
         self.terminate_instances_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/terminate_instances.json"
         self.describe_images_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/describe_images.json"
         self.describe_instances_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/describe_instances.json"
         self.run_instances_file = "#{File.expand_path(File.dirname(__FILE__))}/../../test/test_files/run_instances.json"
+        self.account = "a-shpoolxx"
       end
       
       def describe_instances(list=[])
@@ -33,7 +35,7 @@ module Tama
             :aws_launch_time=>inst_map["created_at"],
             :tags=>{},
             :aws_reservation_id=>"",
-            :aws_owner=>inst_map["account_id"],
+            :aws_owner=>self.account,
             :instance_lifecycle=>"",
             :block_device_mappings=>[{:ebs_volume_id=>"", :ebs_status=>"", :ebs_attach_time=>"", :ebs_delete_on_termination=>false, :device_name=>""}],
             :ami_launch_index=>"",
@@ -106,7 +108,7 @@ module Tama
             {:aws_launch_time=>inst_map["created_at"],
             :tags=>{},
             :aws_reservation_id=>"",
-            :aws_owner=>inst_map["account_id"],
+            :aws_owner=>self.account,
             :ami_launch_index=>"",
             :aws_availability_zone=>"",
             :aws_groups=>inst_map["netfilter_group_id"],
