@@ -27,6 +27,10 @@ describe "TamaController" do
     it_should_behave_like "terminate_instances", tama, @uuids
   end
   
+  describe "describe_images" do
+    it_should_behave_like "describe_images", tama, config["describe_images"]
+  end
+  
   [:describe_host_nodes,:describe_instance_specs].each { |method|
     describe "#{method}" do
       it_should_behave_like "wakame describe method", tama, method, config[method.to_s]

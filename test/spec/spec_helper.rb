@@ -47,10 +47,6 @@ shared_examples_for "describe_instances return values" do |result,args|
     @uuids = result.map {|i| i[:aws_instance_id]}
   end
   
-  #it "Should have described #{result.length} instances" do
-    #result.length.should == result.length
-  #end
-  
   result.each { |inst_map|
     #it "#{inst_map[:aws_instance_id]} should have #{args["HOST"]} set as :aws_availability_zone" do
       #inst_map[:aws_availablity_zone].should == args["HOST"]
@@ -75,6 +71,19 @@ shared_examples_for "terminate_instances" do |tama,uuids|
   end
 end
 
+shared_examples_for "describe_images" do |tama,ids|
+  it "should describe all images" do
+    res = tama.describe_images
+    res.class.should == Array
+  end
+  
+  it "should describe #{ids.join(",")}" do
+    res = tama.describe_images(ids)
+    res.length.should == ids.length
+    res.map {|img| img[:aws_id]}.sort.should == ids.sort
+  end
+end
+
 shared_examples_for "wakame describe method" do |tama,method_name,ids|
   it "should describe all" do
     res = tama.send(method_name)
@@ -91,9 +100,3 @@ shared_examples_for "wakame describe method" do |tama,method_name,ids|
     res.first["results"].map {|node| node["uuid"]}.sort.should == ids.sort
   end
 end
-
-#shared_examples_for "describe_images" do |result,args|
-  #result.each { |img_map|
-    #it "#{img_map[:aws]}"
-  #}
-#end
