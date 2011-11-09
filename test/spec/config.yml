@@ -1,0 +1,24 @@
+# Api parameters
+Account: "a-shpoolxx"
+
+Ec2_host: "192.168.2.22"
+Ec2_port: "9005"
+Ec2_protocol: "http"
+
+Wakame_host: "127.0.0.1"
+Wakame_port: "9001"
+Wakame_protocol: "http"
+
+# Run_instance parameters
+Image_id: 'wmi-lucid5'
+Min: 2
+Max: 3
+Security_Groups:
+  ng-demofgr: 'default'
+  ng-82bn95ou: 'joske'
+  ng-4udfccup: 'jefke'
+SSH_Key: 'demo'
+User_Data: 'joske'
+Addressing_Type: 'public'
+Instance_Type: 'is-demospec'
+HOST: 'hp-demo1'
