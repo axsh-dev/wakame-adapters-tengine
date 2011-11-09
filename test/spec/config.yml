@@ -22,3 +22,10 @@ User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'
 HOST: 'hp-demo1'
+
+describe_host_nodes:
+  [hp-demo1]
+describe_instance_specs:
+  [is-demo2, is-demospec]
+describe_images:
+  [wmi-lucid0, wmi-lucid1, wmi-lucid5, wmi-lucid6]

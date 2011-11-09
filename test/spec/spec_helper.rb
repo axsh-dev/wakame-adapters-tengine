@@ -75,9 +75,9 @@ shared_examples_for "terminate_instances" do |tama,uuids|
   end
 end
 
-shared_examples_for "describe_host_nodes" do |tama,node_ids|
-  it "should describe all host nodes" do
-    res = tama.describe_host_nodes
+shared_examples_for "wakame describe method" do |tama,method_name,ids|
+  it "should describe all" do
+    res = tama.send(method_name)
     # We don't know how many host nodes there are and what their values are so
     # we just check if we got a proper reply with a results array in it
     res.nil?.should be_false
@@ -85,10 +85,10 @@ shared_examples_for "describe_host_nodes" do |tama,node_ids|
     res.first["results"].class.should == Array
   end
   
-  it "should describe #{node_ids.join(",")}" do
-    res = tama.describe_host_nodes(node_ids)
-    res.first["results"].length.should == node_ids.length
-    res.first["results"].map {|node| node["uuid"]}.sort.should == node_ids.sort
+  it "should describe #{ids.join(",")}" do
+    res = tama.send(method_name,ids)
+    res.first["results"].length.should == ids.length
+    res.first["results"].map {|node| node["uuid"]}.sort.should == ids.sort
   end
 end
 
