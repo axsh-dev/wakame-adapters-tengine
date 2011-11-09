@@ -52,6 +52,10 @@ describe "TamaController" do
     it_should_behave_like "terminate_instances", tama, @uuids
   end
   
+  describe "describe_host_nodes" do
+    it_should_behave_like "describe_host_nodes", tama, [config["HOST"]]
+  end
+  
   #before(:all) do
     ## Initialize our controller
     ##@tama = Tama::Tama.new(Account,Ec2_host,Ec2_port,Ec2_protocol,Wakame_host,Wakame_port,Wakame_protocol)
