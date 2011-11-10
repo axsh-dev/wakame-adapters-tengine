@@ -99,7 +99,7 @@ module Tama
       end
       
       def show_host_nodes(list = [], account = self.account)
-        make_request("#{self.web_api}/api/host_pools",Net::HTTP::Get,account, list)
+        make_request("#{self.web_api}/api/host_nodes",Net::HTTP::Get,account, list)
       end
       alias :describe_host_nodes :show_host_nodes
       
