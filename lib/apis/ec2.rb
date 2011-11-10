@@ -132,11 +132,11 @@ module Tama
       def terminate_instances(list=[])
         File.open(self.terminate_instances_file) { |file|
           JSON.parse(file.readlines.to_s).map { |instance_id|
-            {:aws_shutdown_state      => nil,
-             :aws_instance_id         => instance_id,
-             :aws_shutdown_state_code => nil,
-             :aws_prev_state          => nil,
-             :aws_prev_state_code     => nil}
+            {:aws_current_state_name=>"",
+             :aws_prev_state_name=>"",
+             :aws_prev_state_code=>0,
+             :aws_current_state_code=>0,
+             :aws_instance_id=>instance_id}
           }
         }
       end
