@@ -17,7 +17,7 @@ Security_Groups:
   ng-demofgr: 'default'
   #ng-5ltkiagj: 'joske'
   #ng-cxiouozg: 'jefke'
-SSH_Key: 'demo'
+SSH_Key: 'ssh-demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'

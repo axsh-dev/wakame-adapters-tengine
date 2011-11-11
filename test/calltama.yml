@@ -18,7 +18,7 @@ Min: 1
 Max: 1
 Security_Groups: ['ng-demofgr']#['default', 'joske', 'jefke']
 #Security_Groups: ['jefke']
-SSH_Key: 'demo'
+SSH_Key: 'ssh-demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'
