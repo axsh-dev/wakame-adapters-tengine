@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["axsh"]
-  s.date = "2011-10-30"
+  s.date = "2011-11-11"
   s.description = "wakame-adapters-tengine is ..."
   s.email = "axsh"
   s.extra_rdoc_files = [
@@ -25,17 +25,23 @@ Gem::Specification.new do |s|
     "lib/apis/wakame.rb",
     "lib/controllers/controller.rb",
     "tama.rb",
+    "test/calltama",
+    "test/calltama.yml",
     "test/generic_test.rb",
-    "test/real_test.rb",
+    "test/spec/config.yml",
+    "test/spec/real_api_spec.rb",
+    "test/spec/spec_helper.rb",
     "test/test_files/describe_images.json",
     "test/test_files/describe_instances.json",
     "test/test_files/host_nodes.json",
     "test/test_files/run_instances.json",
-    "test/test_files/terminate_instances.json"
+    "test/test_files/show_instance_specs.json",
+    "test/test_files/terminate_instances.json",
+    "wakame-adapters-tengine.gemspec"
   ]
   s.homepage = "https://github.com/axsh-dev/wakame-adapters-tengine"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.11"
   s.summary = "wakame-adapters-tengine is ..."
 
   if s.respond_to? :specification_version then
