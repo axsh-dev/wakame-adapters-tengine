@@ -14,10 +14,11 @@ Instances_to_terminate: []
 
 #Arguments for run_instances
 Image_id: 'wmi-lucid5'
-Min: 3
-Max: 3
-Security_Groups: ['default']
-SSH_Key: 'demopair'
+Min: 1
+Max: 1
+Security_Groups: ['ng-demofgr']#['default', 'joske', 'jefke']
+#Security_Groups: ['jefke']
+SSH_Key: 'demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'

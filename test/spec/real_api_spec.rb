@@ -9,7 +9,7 @@ config = YAML.load_file File.expand_path('../config.yml', __FILE__)
 
 describe "TamaController" do
   tama = Tama::Tama.new(config["Account"],config["Ec2_host"],config["Ec2_port"],config["Ec2_protocol"],config["Wakame_host"],config["Wakame_port"],config["Wakame_protocol"])
-  res = tama.run_instances(config["Image_id"],config["Min"],config["Max"],config["Security_Groups"].values,config["SSH_Key"], config["User_Data"], config["Addressing_Type"], config["Instance_Type"], nil, nil, config["HOST"])
+  res = tama.run_instances(config["Image_id"],config["Min"],config["Max"],config["Security_Groups"].keys,config["SSH_Key"], config["User_Data"], config["Addressing_Type"], config["Instance_Type"], nil, nil, config["HOST"])
   
   describe "run_instances" do
     it_should_behave_like "run_instances", res, config

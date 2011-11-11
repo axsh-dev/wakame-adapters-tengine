@@ -15,8 +15,8 @@ Min: 2
 Max: 3
 Security_Groups:
   ng-demofgr: 'default'
-  ng-82bn95ou: 'joske'
-  ng-4udfccup: 'jefke'
+  #ng-5ltkiagj: 'joske'
+  #ng-cxiouozg: 'jefke'
 SSH_Key: 'demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
