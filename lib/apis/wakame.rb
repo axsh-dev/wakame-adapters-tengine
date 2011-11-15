@@ -50,7 +50,7 @@ module Tama
           :root_device_name=>"",
           :aws_ramdisk_id=>"",
           :aws_availability_zone=>inst_map["host_node"],
-          :aws_groups=>inst_map["netfilter_group_id"],
+          :aws_groups=>inst_map["security_groups"],
           :spot_instance_request_id=>"",
           :ssh_key_name=>inst_map["ssh_key_pair"],
           :virtualization_type=>"",
@@ -99,7 +99,7 @@ module Tama
       end
       
       def show_host_nodes(list = [], account = self.account)
-        make_request("#{self.web_api}/api/host_pools",Net::HTTP::Get,account, list)
+        make_request("#{self.web_api}/api/host_nodes",Net::HTTP::Get,account, list)
       end
       alias :describe_host_nodes :show_host_nodes
       
