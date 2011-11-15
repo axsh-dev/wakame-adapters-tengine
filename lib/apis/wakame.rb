@@ -50,7 +50,7 @@ module Tama
           :root_device_name=>"",
           :aws_ramdisk_id=>"",
           :aws_availability_zone=>inst_map["host_node"],
-          :aws_groups=>inst_map["netfilter_groups"],
+          :aws_groups=>inst_map["security_groups"],
           :spot_instance_request_id=>"",
           :ssh_key_name=>inst_map["ssh_key_pair"],
           :virtualization_type=>"",
