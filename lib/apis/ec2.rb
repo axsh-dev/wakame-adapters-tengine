@@ -24,7 +24,7 @@ module Tama
       
       def describe_instances(list=[])
         File.open(self.describe_instances_file) { |file|
-          res = JSON.parse(file.readlines.to_s).first["results"]
+          res = JSON.parse(file.readlines.join.to_s).first["results"]
           res.delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res.map { |inst_map|
             dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
@@ -70,7 +70,7 @@ module Tama
       
       def describe_images(list=[], image_type=nil)
         File.open(self.describe_images_file) { |file|
-          res = JSON.parse(file.readlines.to_s).first["results"]
+          res = JSON.parse(file.readlines.join.to_s).first["results"]
           res.delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res.map { |img_map|
             {:root_device_name=>"",
@@ -102,7 +102,7 @@ module Tama
       # run_instances method. The output is read from a file as usual.
       def run_instances(image_id=nil, min_count=nil, max_count=nil, group_ids=nil, key_name=nil, user_data='', addressing_type = nil, instance_type = nil, kernel_id = nil, ramdisk_id = nil, availability_zone = nil, block_device_mappings = nil)
         File.open(self.run_instances_file) { |file|
-          JSON.parse(file.readlines.to_s).map { |inst_map|
+          JSON.parse(file.readlines.join.to_s).map { |inst_map|
             dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
             private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
             {:aws_launch_time=>inst_map["created_at"],
@@ -131,7 +131,7 @@ module Tama
       
       def terminate_instances(list=[])
         File.open(self.terminate_instances_file) { |file|
-          JSON.parse(file.readlines.to_s).map { |instance_id|
+          JSON.parse(file.readlines.join.to_s).map { |instance_id|
             {:aws_current_state_name=>"",
              :aws_prev_state_name=>"",
              :aws_prev_state_code=>0,

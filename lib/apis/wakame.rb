@@ -184,7 +184,7 @@ module Tama
       private
       def read_file(file,list = [])
         File.open(file) { |file|
-          res = JSON.parse(file.readlines.to_s)
+          res = JSON.parse(file.readlines.join.to_s)
           res.first["results"].delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res
         }
