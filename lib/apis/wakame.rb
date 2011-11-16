@@ -151,6 +151,11 @@ module Tama
       attr_accessor :private_network_name
       attr_accessor :account
       
+      alias :describe_instance_specs_file :show_instance_specs_file
+      alias :describe_instance_specs_file= :show_instance_specs_file=
+      alias :describe_instances_file :show_instances_file
+      alias :describe_instances_file= :show_instances_file=
+      
       include InstanceHashBuilder
       
       def initialize
