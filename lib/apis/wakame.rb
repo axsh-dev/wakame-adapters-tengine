@@ -151,6 +151,11 @@ module Tama
       attr_accessor :private_network_name
       attr_accessor :account
       
+      alias :describe_instance_specs_file :show_instance_specs_file
+      alias :describe_instance_specs_file= :show_instance_specs_file=
+      alias :describe_instances_file :show_instances_file
+      alias :describe_instances_file= :show_instances_file=
+      
       include InstanceHashBuilder
       
       def initialize
@@ -184,7 +189,7 @@ module Tama
       private
       def read_file(file,list = [])
         File.open(file) { |file|
-          res = JSON.parse(file.readlines.to_s)
+          res = JSON.parse(file.readlines.join.to_s)
           res.first["results"].delete_if {|item| not list.member?(item["id"])} unless list.empty?
           res
         }
