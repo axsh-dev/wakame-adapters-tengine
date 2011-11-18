@@ -9,33 +9,6 @@ module Tama
       # but changes the layout of IP addresses
       def build_instances_hash(w_response,account_id)
         w_response.first["results"].map { |inst_map|
-          dns_name = inst_map["network"].first["nat_dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
-          private_dns_name = inst_map["network"].first["dns_name"] unless inst_map["network"].nil? || inst_map["network"].empty?
-          # Build the hash of ipaddresses
-          unless inst_map["network"].nil? || inst_map["network"].empty?
-            ip_address = {}
-            inst_map["network"].each { |network|
-              ip_address.merge!({network["network_name"] => network["ipaddr"]})
-              ip_address.merge!({network["nat_network_name"] => network["nat_ipaddr"]})
-            }
-            # Remove non existing addresses
-            ip_address.delete_if {|k,v| k.nil? || v.nil?}
-            
-            # Determine private ip address
-            private_ip_address = ip_address[self.private_network_name]
-            
-            # Build the hash of dns names
-            dns_name = {}
-            inst_map["network"].each { |network|
-              dns_name.merge!({network["network_name"] => network["dns_name"]})
-              dns_name.merge!({network["nat_network_name"] => network["nat_dns_name"]})
-            }
-            dns_name.delete_if {|k,v| k.nil?}
-            
-            # Determine the private dns name
-            private_dns_name = dns_name[self.private_network_name]
-          end
-
           # Build the final hash to return
           # This hash is based on right_aws' describe_instances but
           # changes the ip_address format
@@ -59,21 +32,36 @@ module Tama
           :aws_instance_id=>inst_map["id"],
           :aws_product_codes=>[],
           :client_token=>"",
-          :private_ip_address=>private_ip_address,
+          :private_ip_address=>private_network(inst_map),
           :architecture=>inst_map["arch"],
           :aws_state_code=>0,
           :aws_image_id=>inst_map["image_id"],
           :root_device_type=>"",
-          :ip_address=>ip_address,
-          :dns_name=>dns_name,
+          :ip_address=>network_list(inst_map),
+          :dns_name=>network_list(inst_map,"dns_name"),
           :monitoring_state=>"",
           :aws_instance_type=>inst_map["instance_spec_id"],
           :aws_state=>inst_map["state"],
-          :private_dns_name=>private_dns_name,
+          :private_dns_name=>private_network(inst_map,"dns_name"),
           :aws_reason=>""
           }
         }
       end
+      
+      def network_list(inst_map, key = "ipaddr", separator = ",")
+      ip_address = []
+      inst_map["network"].each { |network|
+        ip_address << "#{network["network_name"]}=#{network[key]}" unless network["network_name"].nil? || network[key].nil?
+        ip_address << "#{network["nat_network_name"]}=#{network["nat_#{key}"]}" unless network["nat_network_name"].nil? || network[key].nil?
+      }
+      ip_address.uniq.join(separator)
+    end
+    
+    def private_network(inst_map, key = "ipaddr", private_network = self.private_network_name)
+      inst_map["network"].each { |network|
+        return network[key] if network["network_name"] == private_network_name
+      }
+    end
     end
     
     class WakameApi
