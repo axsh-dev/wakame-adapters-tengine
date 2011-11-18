@@ -87,12 +87,12 @@ module Tama
       end
       
       def show_host_nodes(list = [], account = self.account)
-        make_request("#{self.web_api}/api/host_nodes",Net::HTTP::Get,account, list)
+        make_request("#{self.web_api}/api/host_nodes",Net::HTTP::Get,account, list).first["results"]
       end
       alias :describe_host_nodes :show_host_nodes
       
       def show_instance_specs(list = [], account = self.account)
-        make_request("#{self.web_api}/api/instance_specs",Net::HTTP::Get,account, list)
+        make_request("#{self.web_api}/api/instance_specs",Net::HTTP::Get,account, list).first["results"]
       end
       alias :describe_instance_specs :show_instance_specs
       
@@ -158,12 +158,12 @@ module Tama
       end
       
       def show_host_nodes(list = [])
-        read_file(self.host_nodes_file, list)
+        read_file(self.host_nodes_file, list).first["results"]
       end
       alias :describe_host_nodes :show_host_nodes
       
       def show_instance_specs(list = [])
-        read_file(self.show_instance_specs_file, list)
+        read_file(self.show_instance_specs_file, list).first["results"]
       end
       alias :describe_instance_specs :show_instance_specs
       
