@@ -16,10 +16,10 @@ Instances_to_terminate: []
 Image_id: 'wmi-lucid5'
 Min: 1
 Max: 1
-Security_Groups: ['ng-demofgr']#['default', 'joske', 'jefke']
+Security_Groups: ['sg-demofgr']#['default', 'joske', 'jefke']
 #Security_Groups: ['jefke']
 SSH_Key: 'ssh-demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'
-HOST: 'hp-demo1'
+HOST: 'hn-demo1'

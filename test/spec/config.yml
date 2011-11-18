@@ -10,21 +10,21 @@ Wakame_port: "9001"
 Wakame_protocol: "http"
 
 # Run_instance parameters
-Image_id: 'wmi-lucid5'
+Image_id: 'wmi-lucid0'
 Min: 2
 Max: 3
 Security_Groups:
-  ng-demofgr: 'default'
+  sg-demofgr: 'default'
   #ng-5ltkiagj: 'joske'
   #ng-cxiouozg: 'jefke'
 SSH_Key: 'ssh-demo'
 User_Data: 'joske'
 Addressing_Type: 'public'
 Instance_Type: 'is-demospec'
-HOST: 'hp-demo1'
+HOST: 'hn-demo1'
 
 describe_host_nodes:
-  [hp-demo1]
+  [hn-demo1]
 describe_instance_specs:
   [is-demo2, is-demospec]
 describe_images:

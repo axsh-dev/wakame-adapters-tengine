@@ -87,16 +87,15 @@ end
 shared_examples_for "wakame describe method" do |tama,method_name,ids|
   it "should describe all" do
     res = tama.send(method_name)
-    # We don't know how many host nodes there are and what their values are so
-    # we just check if we got a proper reply with a results array in it
     res.nil?.should be_false
-    res.empty?.should be_false
-    res.first["results"].class.should == Array
+    res.class.should == Array
+    #res.empty?.should be_false
+    #res.first["results"].class.should == Array
   end
   
   it "should describe #{ids.join(",")}" do
     res = tama.send(method_name,ids)
-    res.first["results"].length.should == ids.length
-    res.first["results"].map {|node| node["uuid"]}.sort.should == ids.sort
+    res.length.should == ids.length
+    res.map {|node| node["uuid"]}.sort.should == ids.sort
   end
 end
