@@ -155,6 +155,8 @@ module Tama
       alias :describe_instance_specs_file= :show_instance_specs_file=
       alias :describe_instances_file :show_instances_file
       alias :describe_instances_file= :show_instances_file=
+      alias :describe_host_nodes_file :host_nodes_file
+      alias :describe_host_nodes_file= :host_nodes_file=
       
       include InstanceHashBuilder
       
