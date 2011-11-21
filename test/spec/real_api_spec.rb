@@ -1,4 +1,4 @@
-load_path = "#{File.expand_path(File.dirname(__FILE__))}/../.."
+load_path = "#{File.expand_path(File.dirname(__FILE__))}/../../lib"
 $LOAD_PATH.unshift(load_path) unless $LOAD_PATH.include?(load_path)
 
 require 'spec_helper'

@@ -28,6 +28,18 @@
             ],
             "nat_network_name": "nw-outside",
             "network_name": "nw-data"
+          },
+          {
+            "nat_ipaddr": [
+
+            ],
+            "nat_dns_name": null,
+            "dns_name": "9pia8e7p.shpoolxx.vdc.extra",
+            "ipaddr": [
+              "10.0.2.94"
+            ],
+            "nat_network_name": null,
+            "network_name": "nw-extra"
           }
         ],
         "state": "running",

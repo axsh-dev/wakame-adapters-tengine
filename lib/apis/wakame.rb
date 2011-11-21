@@ -32,38 +32,55 @@ module Tama
           :aws_instance_id=>inst_map["id"],
           :aws_product_codes=>[],
           :client_token=>"",
-          :private_ip_address=>private_network(inst_map),
+          :private_ip_address=>private_ip(inst_map),
           :architecture=>inst_map["arch"],
           :aws_state_code=>0,
           :aws_image_id=>inst_map["image_id"],
           :root_device_type=>"",
-          :ip_address=>network_list(inst_map),
-          :dns_name=>network_list(inst_map,"dns_name"),
+          :ip_address=>ip_list(inst_map),
+          :dns_name=>dns_list(inst_map),
           :monitoring_state=>"",
           :aws_instance_type=>inst_map["instance_spec_id"],
           :aws_state=>inst_map["state"],
-          :private_dns_name=>private_network(inst_map,"dns_name"),
+          :private_dns_name=>private_dns(inst_map),
           :aws_reason=>""
           }
         }
       end
       
-      def network_list(inst_map, key = "ipaddr", separator = ",")
-      ip_address = []
-      inst_map["network"].each { |network|
-        ip_address << "#{network["network_name"]}=#{network[key]}" unless network["network_name"].nil? || network[key].nil?
-        ip_address << "#{network["nat_network_name"]}=#{network["nat_#{key}"]}" unless network["nat_network_name"].nil? || network[key].nil?
-      }
-      ip_address.uniq.join(separator)
+      def dns_list(inst_map, separator = ",")
+        ip_address = []
+        inst_map["network"].each { |network|
+          ip_address << "#{network["network_name"]}=#{network["dns_name"]}" unless network["network_name"].nil? || network["dns_name"].nil?
+          ip_address << "#{network["nat_network_name"]}=#{network["nat_#{"dns_name"}"]}" unless network["nat_network_name"].nil? || network["nat_dns_name"].nil?
+        }
+        ip_address.uniq.join(separator)
+      end
+      
+      def ip_list(inst_map, separator = ",")
+        ip_address = []
+        inst_map["network"].each { |network|
+          ip_address << "#{network["network_name"]}=#{network["ipaddr"].first}" unless network["network_name"].nil? || network["ipaddr"].nil?
+          ip_address << "#{network["nat_network_name"]}=#{network["nat_ipaddr"].first}" unless network["nat_network_name"].nil? || network["nat_ipaddr"].nil?
+        }
+        ip_address.uniq.join(separator)
+      end
+      
+      def private_dns(inst_map, private_network = self.private_network_name)
+        output = inst_map["network"].find(lambda { {"dns_name" => ""} }) { |network|
+          network["network_name"] == private_network
+        }
+        output["dns_name"]
+      end
+      
+      def private_ip(inst_map, private_network = self.private_network_name)
+        output = inst_map["network"].find(lambda { {"ipaddr" => [""]} }) { |network|
+          network["network_name"] == private_network
+        }
+        output["ipaddr"].first
+      end
     end
-    
-    def private_network(inst_map, key = "ipaddr", private_network = self.private_network_name)
-      inst_map["network"].each { |network|
-        return network[key] if network["network_name"] == private_network_name
-      }
-    end
-    end
-    
+
     class WakameApi
       attr_accessor :host
       attr_accessor :port
